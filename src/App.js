@@ -5,11 +5,12 @@ import Month from "./components/Month";
 import Sidebar from "./components/sidebar/Sidebar";
 import { getMonth } from "./utils/util";
 import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement } from "./store/slices/monthSlice";
+import { increment, decrement, setAllEvents } from "./store/slices/monthSlice";
+import CreateEvent from "./components/CreateEvent";
 
 function App() {
   const monthIndex = useSelector((state) => state.month.monthIndex);
-  const dispatch = useDispatch();
+  const modal = useSelector((state) => state.month.createEventModal);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
 
   useEffect(() => {
@@ -18,9 +19,10 @@ function App() {
 
   return (
     <>
+      {modal && <CreateEvent></CreateEvent>}
       <div className=" h-screen flex flex-col">
         <CalendarHeader />
-        <div className="flex flex-1">
+        <div className="flex flex-1 overflow-hidden">
           <Sidebar />
           <Month month={currentMonth} />
         </div>

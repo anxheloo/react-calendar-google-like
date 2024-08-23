@@ -5,18 +5,15 @@ import { getMonth } from "../../../utils/util";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa6";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setSmallCalendarMonth,
-  setMonthIndex,
-  setDaySelected,
-} from "../../../store/slices/monthSlice";
+import { setMonthIndex } from "../../../store/slices/monthSlice";
+import SmallCalendarDay from "./SmallCalendarDay";
 
 const SmallCalendar = () => {
   const monthIndex = useSelector((state) => state.month.monthIndex);
   const smallCalendarMonth = useSelector(
     (state) => state.month.smallCalendarMonth
   );
-  const daySelected = useSelector((state) => state.month.daySelected);
+
   const dispatch = useDispatch();
 
   const [currentMonthIndex, setCurrentMonthIndex] = useState(dayjs().month());
@@ -39,7 +36,6 @@ const SmallCalendar = () => {
   }, [currentMonthIndex]);
 
   useEffect(() => {
-    // setCurrentMonth(getMonth(monthIndex));
     setCurrentMonthIndex(monthIndex);
   }, [monthIndex]);
 
@@ -48,19 +44,6 @@ const SmallCalendar = () => {
       dispatch(setMonthIndex(smallCalendarMonth));
     }
   }, [smallCalendarMonth]);
-
-  const getCurrentDayClass = (day) => {
-    if (day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")) {
-      console.log("This is day.format(DD-MM-YY): ", day.format("DD-MM-YY"));
-      return "bg-blue-600 text-white rounded-full w-7";
-    } else if (day.format("DD-MM-YY") === daySelected) {
-      return "bg-blue-200 text-blue-600 font-bold rounded-full";
-    } else {
-      return "";
-    }
-  };
-
-  console.log("This is daySelected:", daySelected);
 
   return (
     <div className="mt-9">
@@ -95,22 +78,17 @@ const SmallCalendar = () => {
       <div className=" grid grid-cols-7 grid-rows-6">
         {currentMonth[0].map((day, index) => (
           <span key={index} className="text-sm py-1 text-center">
-            {day.format("dd").charAt(0)}
+            {day.format("dd").toLowerCase().charAt(0)}
           </span>
         ))}
         {currentMonth.map((row, i) => (
           <React.Fragment key={i}>
             {row.map((day, j) => (
-              <button
-                onClick={() => {
-                  dispatch(setSmallCalendarMonth(currentMonthIndex));
-                  dispatch(setDaySelected(day.format("DD-MM-YY")));
-                }}
+              <SmallCalendarDay
                 key={j}
-                className={`py-1 w-full ${getCurrentDayClass(day)}`}
-              >
-                <span className="text-sm ">{day.format("D")}</span>
-              </button>
+                day={day}
+                currentMonthIndex={currentMonthIndex}
+              ></SmallCalendarDay>
             ))}
           </React.Fragment>
         ))}

@@ -6,6 +6,8 @@ const initialState = {
   monthIndex: dayjs().month(),
   smallCalendarMonth: null, // this is used in small calendar when we click on a date in a different month to update the month on both calendars
   daySelected: null, //Day selected is used in the small calendar when we click on a date there
+  createEventModal: false,
+  allEvents: [],
 };
 
 export const monthSlice = createSlice({
@@ -37,6 +39,18 @@ export const monthSlice = createSlice({
     setDaySelected: (state, action) => {
       state.daySelected = action.payload;
     },
+
+    openModal: (state) => {
+      state.createEventModal = true;
+    },
+
+    closeModal: (state) => {
+      state.createEventModal = false;
+    },
+
+    setAllEvents: (state, action) => {
+      state.allEvents = action.payload;
+    },
   },
 });
 
@@ -48,6 +62,9 @@ export const {
   setSmallCalendarMonth,
   setMonthIndex,
   setDaySelected,
+  openModal,
+  closeModal,
+  setAllEvents,
 } = monthSlice.actions;
 
 export default monthSlice.reducer;

@@ -5,7 +5,12 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa6";
 
 import { useDispatch, useSelector } from "react-redux";
-import { increment, decrement, reset } from "../store/slices/monthSlice";
+import {
+  increment,
+  decrement,
+  reset,
+  setDaySelected,
+} from "../store/slices/monthSlice";
 
 const CalendarHeader = () => {
   const monthIndex = useSelector((state) => state.month.monthIndex);
@@ -25,6 +30,7 @@ const CalendarHeader = () => {
 
   const handleToday = () => {
     dispatch(reset());
+    dispatch(setDaySelected(dayjs()));
   };
 
   console.log("THis is monthIndex:", monthIndex);

@@ -1,29 +1,70 @@
-import dayjs from "dayjs";
-import React from "react";
+import React, { useRef } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { openModal, setDaySelected } from "../store/slices/monthSlice";
+import useDayClassHook from "../utils/useDayClassHook";
 
 const Day = ({ day, rowIndex }) => {
-  const getCurrentDayClass = () => {
-    return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
-      ? "bg-blue-600 text-white rounded-full w-7"
-      : "";
+  const useDayClass = useDayClassHook(day);
+
+  const dispatch = useDispatch();
+  const allEvents = useSelector((state) => state.month.allEvents);
+  const elementRef = useRef();
+
+  const events = allEvents.filter(
+    (event) => event.selectedDay === day.valueOf()
+  );
+
+  const handleDayClick = () => {
+    dispatch(setDaySelected(day.valueOf()));
+    dispatch(openModal());
   };
 
-  // String
-  console.log("This is typeof day.format(DD):", typeof day.format("DD"));
+  const handleMouseOverHeader = () => {
+    elementRef?.current?.classList.add("bg-white");
+  };
 
   return (
-    <div className=" border border-gray-200 flex flex-col">
-      <header className="flex flex-col items-center">
+    <div
+      onMouseOver={handleMouseOverHeader}
+      className="h-full border border-gray-200 flex flex-col justify-between cursor-pointer hover:bg-gray-100 overflow-hidden"
+      onClick={handleDayClick}
+    >
+      <div className=" text-sm">
         {rowIndex === 0 && (
-          <p className="w-full h-full text-center text-sm mt-1 border-b ">
-            {day.format("ddd").toUpperCase()}
+          <p className="text-center border-b" ref={elementRef}>
+            {day.format("ddd")}
           </p>
         )}
 
-        <p className={`text-sm p-1 my-1 text-center ${getCurrentDayClass()}`}>
-          {day.format("DD")}
-        </p>
-      </header>
+        <div className="flex items-center p-2 h-[45px]">
+          <p className={`flex justify-center items-center ${useDayClass}`}>
+            {day.format("DD")}
+          </p>
+        </div>
+      </div>
+
+      {/* {rowIndex !== 0 && ( */}
+
+      <div className="flex flex-col justify-end h-[80px] p-2 overflow-hidden">
+        {events.map((item) => (
+          <div className="flex justify-between items-center">
+            <div key={item.id} className="flex items-center gap-1">
+              <span
+                className=" size-4 rounded-full"
+                style={{ backgroundColor: item.labelColor }}
+              ></span>
+              <h1>{item.title}</h1>
+            </div>
+
+            <span>time</span>
+          </div>
+        ))}
+
+        <span>+2 More</span>
+      </div>
+
+      {/* )} */}
     </div>
   );
 };
