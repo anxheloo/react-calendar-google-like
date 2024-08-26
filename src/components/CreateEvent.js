@@ -12,18 +12,18 @@ import dayjs from "dayjs";
 const CreateEvent = () => {
   const dispatch = useDispatch();
   const daySelected = useSelector((state) => state.month.daySelected);
+  const selectedEvent = useSelector((state) => state.month.selectedEvent);
   const allEvents = useSelector((state) => state.month.allEvents);
 
-  // const [allEvents, setAllEvents] = useState([]);
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    scheduleType: "",
-    labelColor: "red",
+    title: selectedEvent ? selectedEvent.title : "",
+    description: selectedEvent ? selectedEvent.description : "",
+    category: selectedEvent ? selectedEvent.category : "",
+    labelColor: selectedEvent ? selectedEvent.labelColor : "red",
     selectedDay: daySelected,
     // Converts milliseconds back to a date string
     // const readableDate = new Date(selectedDay).toLocaleDateString("en-US");
-    id: Date.now(),
+    id: selectedEvent ? selectedEvent.id : Date.now(),
   });
 
   const labelClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
@@ -60,6 +60,35 @@ const CreateEvent = () => {
     } catch (error) {
       console.error("Failed to save events:", error);
     }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const updatedAfterDelete = allEvents.filter(
+        (event) => event.id !== selectedEvent.id
+      );
+      dispatch(setAllEvents(updatedAfterDelete));
+      localStorage.setItem("allEvents", JSON.stringify(updatedAfterDelete));
+      dispatch(closeModal());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEdit = () => {
+    const indexOfItemToEdit = allEvents.indexOf(selectedEvent);
+    console.log(indexOfItemToEdit);
+
+    const ourEvents = [...allEvents];
+
+    ourEvents.splice(indexOfItemToEdit, 1, formData);
+    console.log(ourEvents);
+
+    dispatch(setAllEvents(ourEvents));
+
+    localStorage.setItem("allEvents", JSON.stringify(ourEvents));
+
+    dispatch(closeModal());
   };
 
   return (
@@ -126,12 +155,31 @@ const CreateEvent = () => {
         </div>
 
         <footer className="flex justify-end w-full border-t p-3 mt-5">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md text-white"
-          >
-            Save
-          </button>
+          {selectedEvent ? (
+            <div className="flex gap-2 items-center">
+              <button
+                type="button"
+                className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md text-white"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+              <button
+                type="button"
+                className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md text-white"
+                onClick={handleEdit}
+              >
+                Save changes
+              </button>
+            </div>
+          ) : (
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md text-white"
+            >
+              Save
+            </button>
+          )}
         </footer>
       </form>
     </div>

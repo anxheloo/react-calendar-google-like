@@ -13,7 +13,7 @@ const useDayClassHook = (day) => {
     } else if (currentDayFormatted === selectedDayFormatted) {
       return "bg-blue-200 text-blue-600 font-bold rounded-full size-7";
     } else {
-      return "";
+      return "size-7";
     }
   };
 

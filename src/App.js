@@ -4,8 +4,7 @@ import CalendarHeader from "./components/CalendarHeader";
 import Month from "./components/Month";
 import Sidebar from "./components/sidebar/Sidebar";
 import { getMonth } from "./utils/util";
-import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement, setAllEvents } from "./store/slices/monthSlice";
+import { useSelector } from "react-redux";
 import CreateEvent from "./components/CreateEvent";
 
 function App() {

@@ -15,16 +15,11 @@ const SmallCalendarDay = ({ day, currentMonthIndex }) => {
   const handleClick = () => {
     dispatch(setSmallCalendarMonth(currentMonthIndex));
     dispatch(setDaySelected(day.valueOf()));
-    console.log("This is day:", day);
   };
 
   return (
-    <button
-      onClick={handleClick}
-      // key={j}
-      className={`py-1 w-full ${useDayClass}`}
-    >
-      <span className="text-sm ">{day.format("D")}</span>
+    <button onClick={handleClick} className={`my-1 text-sm ${useDayClass}`}>
+      <span>{day.format("D")}</span>
     </button>
   );
 };
