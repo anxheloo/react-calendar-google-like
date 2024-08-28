@@ -18,7 +18,7 @@ const CreateEvent = () => {
   const [formData, setFormData] = useState({
     title: selectedEvent ? selectedEvent.title : "",
     description: selectedEvent ? selectedEvent.description : "",
-    category: selectedEvent ? selectedEvent.category : "",
+    category: selectedEvent ? selectedEvent.category : "maintenance",
     labelColor: selectedEvent ? selectedEvent.labelColor : "red",
     selectedDay: daySelected,
     // Converts milliseconds back to a date string

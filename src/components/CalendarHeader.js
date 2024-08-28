@@ -103,7 +103,9 @@ const CalendarHeader = () => {
               <button
                 type="button"
                 key={index}
-                className="p-1 text-left hover:bg-blue-200"
+                className={`p-1 text-left hover:bg-blue-200 ${
+                  monthIndex === index && "bg-red-500"
+                }`}
                 onClick={() => handleMonthSelection(index)}
               >
                 {item}
